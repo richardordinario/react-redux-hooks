@@ -1,22 +1,35 @@
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actionCreators } from './state/actions'
+import { actions } from './redux/actions'
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import Header from './containers/layouts/Header'
+import Home from './containers/pages/Home'
+import Users from './containers/pages/Users'
+import UserDetails from './containers/pages/UserDetails';
+
+import { Container } from 'semantic-ui-react'
 
 function App() {
-
   const account = useSelector((state) => state.account)
   const dispatch = useDispatch()
 
-  const { widrawMoney, depositMoney } = bindActionCreators(actionCreators, dispatch)
+  const { widrawMoney, depositMoney } = bindActionCreators(actions, dispatch)
 
 
   return (
-    <div className="App">
-      <h1>{account}</h1>
-      <button onClick={() => widrawMoney(100)} >Widraw</button>
-      <button onClick={() => depositMoney(1000)} >Deposit</button>
-    </div>
+    <Router>
+      <Header/>
+      <Container style={{ marginTop: '7em' }}>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/users" component={Users} />
+          <Route path="/user/:userId" component={UserDetails} />
+        </Switch>
+      </Container>
+    </Router>
   );
 }
 
